@@ -2,4 +2,4 @@ pandas
 nltk
 flask
 joblib
-sklearn
+scikit-learn

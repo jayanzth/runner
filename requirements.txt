@@ -1,0 +1,5 @@
+pandas
+nltk
+flask
+joblib
+sklearn

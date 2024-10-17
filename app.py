@@ -1,4 +1,5 @@
 import pandas as pd
+import os
 import nltk
 from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import TfidfVectorizer
@@ -6,14 +7,11 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import classification_report, accuracy_score
 import joblib
 from flask import Flask, request, jsonify
-import openai
 from nltk.tokenize import word_tokenize
 
 # Set up Flask
 app = Flask(__name__)
 
-# Set your OpenAI API key
-openai.api_key = "491d7869d7e14b86b81a44041c27e4af"
 
 # Load and preprocess text data
 nltk.download('punkt')
@@ -57,15 +55,6 @@ def predict():
 
     return jsonify({"sentiment": prediction[0]})
 
-@app.route('/transcribe', methods=['POST'])
-def transcribe_audio():
-    audio_file = request.files['audio']
-    audio_bytes = audio_file.read()
-
-    # Use Whisper model to transcribe audio
-    response = openai.Audio.transcribe("whisper-1", audio_bytes)
-    transcript = response['text']
-    return jsonify({"transcript": transcript})
-
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if PORT is not set
+    app.run(host='0.0.0.0', port=port)
